@@ -1,6 +1,5 @@
 package com.example.mixin;
 
-import com.example.TheGreatMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.DebugHud;
@@ -27,38 +26,55 @@ public abstract class DebugHudMixin {
             return;
         }
 
-        int cyan = 0xFF00E5FF;
-        int xOffset = 25;
-        int yOffset = 25;
+        int xOffset = 10;
+        int yOffset = 10;
+        int panelWidth = 160;
+        int panelHeight = 58;
 
-        int panelBase = 0xBF101010;
-        context.fill(xOffset - 8, yOffset - 8, xOffset + 200, yOffset + 90, panelBase);
+        int bgDark = 0x770F172A;
+        int borderTopLeft = 0x55FFFFFF;
+        int borderBottomRight = 0x33000000;
 
-        int panelBorderSheen = 0x30FFFFFF;
-        context.fill(xOffset - 8, yOffset - 8, xOffset + 200, yOffset - 7, panelBorderSheen);
-        context.fill(xOffset - 8, yOffset - 8, xOffset - 7, yOffset + 90, panelBorderSheen);
-        context.fill(xOffset + 200, yOffset - 7, xOffset + 200 - 1, yOffset + 90, panelBorderSheen);
-        context.fill(xOffset - 8, yOffset + 90, xOffset + 200, yOffset + 90 - 1, panelBorderSheen);
+        context.fill(xOffset, yOffset, xOffset + panelWidth, yOffset + panelHeight, bgDark);
+        
+        context.fill(xOffset, yOffset, xOffset + panelWidth, yOffset + 1, borderTopLeft);
+        context.fill(xOffset, yOffset, xOffset + 1, yOffset + panelHeight, borderTopLeft);
+        
+        context.fill(xOffset, yOffset + panelHeight - 1, xOffset + panelWidth, yOffset + panelHeight, borderBottomRight);
+        context.fill(xOffset + panelWidth - 1, yOffset, xOffset + panelWidth, yOffset + panelHeight, borderBottomRight);
 
-        int glassSheenDepth = 0x10FFFFFF;
-        context.fill(xOffset - 8, yOffset - 8, xOffset + 200, yOffset + 90, glassSheenDepth);
+        int titleColor = 0xFFFFFF;
+        int dataColor = 0x38BDF8;
 
-        context.drawText(client.textRenderer, "Stats", xOffset, yOffset, cyan, false);
-        context.drawText(client.textRenderer, "FPS: " + client.getCurrentFps(), xOffset, yOffset + 18, cyan, false);
+        context.drawText(client.textRenderer, "Stats", xOffset + 8, yOffset + 8, titleColor, true);
+
+        String fps = "FPS: " + client.getCurrentFps();
+        context.drawText(client.textRenderer, fps, xOffset + 8, yOffset + 22, dataColor, true);
 
         if (client.getCameraEntity() != null) {
-            String coords = String.format("XYZ: %.3f / %.5f / %.3f", 
+            String coords = String.format("XYZ: %.1f / %.1f / %.1f", 
                 client.getCameraEntity().getX(), 
                 client.getCameraEntity().getY(), 
                 client.getCameraEntity().getZ());
-            context.drawText(client.textRenderer, coords, xOffset, yOffset + 32, cyan, false);
+            context.drawText(client.textRenderer, coords, xOffset + 8, yOffset + 34, dataColor, true);
         }
 
         BlockPos pos = client.player.getBlockPos();
-        String biome = client.world.getBiome(pos).getKey().map(key -> key.getValue().getPath().toUpperCase()).orElse("UNKNOWN");
-        context.drawText(client.textRenderer, "BIOME: " + biome, xOffset, yOffset + 68, cyan, false);
+        String rawBiome = client.world.getBiome(pos).getKey().map(key -> key.getValue().getPath()).orElse("unknown");
+        
+        String[] words = rawBiome.replace("_", " ").split(" ");
+        StringBuilder formattedBiome = new StringBuilder();
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                formattedBiome.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1)).append(" ");
+            }
+        }
+        
+        String biomeText = "Biome: " + formattedBiome.toString().trim();
+        context.drawText(client.textRenderer, biomeText, xOffset + 8, yOffset + 46, dataColor, true);
 
         ci.cancel();
     }
 }
+
 
