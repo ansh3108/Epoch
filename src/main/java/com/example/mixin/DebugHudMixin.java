@@ -1,9 +1,14 @@
 package com.example.mixin;
 
+import com.example.TheGreatMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.DebugHud;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.text.Text;
+import net.minecraft.text.Style;
+import net.minecraft.text.StyleSpriteSource;
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -46,17 +51,22 @@ public abstract class DebugHudMixin {
         int titleColor = 0xFFFFFFFF;
         int dataColor = 0xFF7DD3FC;
 
-        context.drawText(client.textRenderer, "Stats", xOffset + 8, yOffset + 8, titleColor, false);
+        Identifier fontId = Identifier.of(TheGreatMod.MOD_ID, "hud");
+        Style customStyle = Style.EMPTY.withFont(new StyleSpriteSource.Font(fontId));
 
-        String fps = "FPS: " + client.getCurrentFps();
-        context.drawText(client.textRenderer, fps, xOffset + 8, yOffset + 22, dataColor, false);
+        Text titleText = Text.literal("Stats").setStyle(customStyle);
+        context.drawText(client.textRenderer, titleText, xOffset + 8, yOffset + 8, titleColor, false);
+
+        Text fpsText = Text.literal("FPS: " + client.getCurrentFps()).setStyle(customStyle);
+        context.drawText(client.textRenderer, fpsText, xOffset + 8, yOffset + 22, dataColor, false);
 
         if (client.getCameraEntity() != null) {
             String coords = String.format("XYZ: %.1f / %.1f / %.1f", 
                 client.getCameraEntity().getX(), 
                 client.getCameraEntity().getY(), 
                 client.getCameraEntity().getZ());
-            context.drawText(client.textRenderer, coords, xOffset + 8, yOffset + 34, dataColor, false);
+            Text coordsText = Text.literal(coords).setStyle(customStyle);
+            context.drawText(client.textRenderer, coordsText, xOffset + 8, yOffset + 34, dataColor, false);
         }
 
         BlockPos pos = client.player.getBlockPos();
@@ -70,9 +80,11 @@ public abstract class DebugHudMixin {
             }
         }
         
-        String biomeText = "Biome: " + formattedBiome.toString().trim();
+        String biomeString = "Biome: " + formattedBiome.toString().trim();
+        Text biomeText = Text.literal(biomeString).setStyle(customStyle);
         context.drawText(client.textRenderer, biomeText, xOffset + 8, yOffset + 46, dataColor, false);
 
         ci.cancel();
     }
 }
+
