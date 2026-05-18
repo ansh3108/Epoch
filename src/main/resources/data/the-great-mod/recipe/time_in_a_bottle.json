@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " E ",
+    "ABA",
+    "ECE"
+  ],
+  "key": {
+    "E": { "item": "minecraft:echo_shard" },
+    "A": { "item": "minecraft:amethyst_shard" },
+    "C": { "item": "minecraft:clock" },
+    "B": { "item": "minecraft:glass_bottle" }
+  },
+  "result": {
+    "id": "the-great-mod:time_in_a_bottle",
+    "count": 1
+  }
+}
+
