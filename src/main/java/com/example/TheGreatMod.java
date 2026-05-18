@@ -8,9 +8,12 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.LoreComponent;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -35,6 +38,7 @@ public class TheGreatMod implements ModInitializer {
 
     public static final RegistryKey<Item> BOTTLE_KEY = RegistryKey.of(RegistryKeys.ITEM, Identifier.of(MOD_ID, "time_in_a_bottle"));
     public static final RegistryKey<Item> ANCHOR_KEY = RegistryKey.of(RegistryKeys.ITEM, Identifier.of(MOD_ID, "stasis_core"));
+    public static final RegistryKey<ItemGroup> ITEM_GROUP_KEY = RegistryKey.of(Registries.ITEM_GROUP.getKey(), Identifier.of(MOD_ID, "main"));
 
     public static final Item TIME_IN_A_BOTTLE = new TimeInABottleItem(new Item.Settings()
             .registryKey(BOTTLE_KEY)
@@ -60,16 +64,27 @@ public class TheGreatMod implements ModInitializer {
             )))
     );
 
+    public static final ItemGroup THE_GREAT_MOD_GROUP = FabricItemGroup.builder()
+            .icon(() -> new ItemStack(STASIS_CORE))
+            .displayName(Text.literal("The Great Mod").formatted(Formatting.AQUA))
+            .entries((context, entries) -> {
+                entries.add(TIME_IN_A_BOTTLE);
+                entries.add(STASIS_CORE);
+            })
+            .build();
+
     @Override
     public void onInitialize() {
         Registry.register(Registries.ITEM, BOTTLE_KEY.getValue(), TIME_IN_A_BOTTLE);
         Registry.register(Registries.ITEM, ANCHOR_KEY.getValue(), STASIS_CORE);
+        Registry.register(Registries.ITEM_GROUP, ITEM_GROUP_KEY, THE_GREAT_MOD_GROUP);
         
         ChronosEngine.initialize();
 
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 boolean hasBottle = false;
+                
                 for (int i = 0; i < player.getInventory().size(); i++) {
                     if (player.getInventory().getStack(i).isOf(TIME_IN_A_BOTTLE)) {
                         hasBottle = true;
@@ -89,3 +104,5 @@ public class TheGreatMod implements ModInitializer {
         LOGGER.info("Chronos Engine booted up.");
     }
 }
+
+
