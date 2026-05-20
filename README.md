@@ -1,12 +1,12 @@
 # Epoch
 
-### 1. Stasis Core
+### 1. Time in a bottle
 A high-cost artifact that intercepts the master server clock, completely freezing the world while leaving the player unaffected.
 
 **Global Stasis:** `Right-Click` to completely freeze the server tick rate 
 **Precision Stepping:** `Sneak + Right-Click` to manually advance the frozen timeline by exactly 1 tick for frame-by-frame debugging.
 
-### 2. Time in a bottle
+### 2. Stasis Core
 A temporal storage device designed for localized time manipulation and acceleration.
 
 ### 3. F3 Debug Screen
