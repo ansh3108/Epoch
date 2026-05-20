@@ -9,6 +9,12 @@ A high-cost artifact that intercepts the master server clock, completely freezin
 ### 2. Time in a bottle
 A temporal storage device designed for localized time manipulation and acceleration.
 
+### 3. F3 Debug Screen
+Improved F3 Debug Screen with better font and transparent interface
+
+<img width="560" height="404" alt="image" src="https://github.com/user-attachments/assets/ee62bb0e-ad2f-4927-85c2-4f590cc10d1a" />
+
+
 ---
 
 ## Crafting Recipes 
