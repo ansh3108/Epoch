@@ -7,10 +7,10 @@
     "XEX"
   ],
   "key": {
-    "N": { "item": "minecraft:nether_star" },
-    "H": { "item": "minecraft:heavy_core" },
-    "E": { "item": "minecraft:echo_shard" },
-    "X": { "item": "minecraft:crying_obsidian" }
+    "N": "minecraft:nether_star",
+    "H": "minecraft:heavy_core",
+    "E": "minecraft:echo_shard",
+    "X": "minecraft:crying_obsidian"
   },
   "result": {
     "id": "the-great-mod:stasis_core",
